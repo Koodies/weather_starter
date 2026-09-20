@@ -181,10 +181,69 @@ export class SingaporeWeatherClient {
   ) {}
 
   async getCurrentWeather(latitude: number, longitude: number): Promise<WeatherSnapshot> {
+    // data.gov.sg's real-time API throttles by concurrency, not total volume: firing these
+    // requests in parallel reliably triggers HTTP 429 on the later ones, but the exact same
+    // calls made one-at-a-time all succeed. So these run sequentially, not via Promise.all.
     const forecastPayload = await this.fetchLatestForecastPayload().catch(() => null);
-    return forecastPayload
+    const temperatureReading = await this.fetchNearestReading(
+      'air-temperature',
+      latitude,
+      longitude,
+    ).catch(() => ({ value: null, timestamp: null }));
+    const twentyFourHourForecast = await this.fetchTwentyFourHourForecast(
+      latitude,
+      longitude,
+    ).catch(() => ({ low: null, high: null, periods: [], timestamp: null }));
+    const humidityReading = await this.fetchNearestReading(
+      'relative-humidity',
+      latitude,
+      longitude,
+    ).catch(() => ({ value: null, timestamp: null }));
+    const rainfallReading = await this.fetchNearestReading('rainfall', latitude, longitude).catch(
+      () => ({ value: null, timestamp: null }),
+    );
+    const windSpeedReading = await this.fetchNearestReading(
+      'wind-speed',
+      latitude,
+      longitude,
+    ).catch(() => ({ value: null, timestamp: null }));
+    const windDirectionReading = await this.fetchNearestReading(
+      'wind-direction',
+      latitude,
+      longitude,
+    ).catch(() => ({ value: null, timestamp: null }));
+    const uvReading = await this.fetchUvIndex().catch(() => ({ value: null, timestamp: null }));
+    const airQuality = await this.fetchAirQuality(latitude, longitude).catch(() => ({
+      psi: null,
+      pm25: null,
+      region: null,
+      timestamp: null,
+    }));
+    const fourDayForecast = await this.fetchFourDayForecast().catch(() => ({
+      days: [],
+      timestamp: null,
+    }));
+
+    const snapshot = forecastPayload
       ? this.snapshotFromPayload(forecastPayload, latitude, longitude)
       : this.emptyForecastSnapshot();
+
+    return {
+      ...snapshot,
+      temperature_c: temperatureReading.value,
+      forecast_low_c: twentyFourHourForecast.low,
+      forecast_high_c: twentyFourHourForecast.high,
+      humidity_percent: humidityReading.value,
+      rainfall_mm: rainfallReading.value,
+      wind_speed_knots: windSpeedReading.value,
+      wind_direction_degrees: windDirectionReading.value,
+      uv_index: uvReading.value,
+      psi_twenty_four_hourly: airQuality.psi,
+      pm25_one_hourly: airQuality.pm25,
+      air_quality_region: airQuality.region,
+      forecast_periods: twentyFourHourForecast.periods,
+      daily_forecast: fourDayForecast.days,
+    };
   }
 
   async fetchLatestForecastPayload(): Promise<ForecastPayload> {
@@ -256,10 +315,10 @@ export class SingaporeWeatherClient {
     region: string | null;
     timestamp: string | null;
   }> {
-    const [psiPayload, pm25Payload] = await Promise.all([
-      this.fetchJson<PsiPayload>(`${this.apiBaseUrl()}/v2/real-time/api/psi`),
-      this.fetchJson<PsiPayload>(`${this.apiBaseUrl()}/v2/real-time/api/pm25`),
-    ]);
+    const psiPayload = await this.fetchJson<PsiPayload>(`${this.apiBaseUrl()}/v2/real-time/api/psi`);
+    const pm25Payload = await this.fetchJson<PsiPayload>(
+      `${this.apiBaseUrl()}/v2/real-time/api/pm25`,
+    );
     for (const payload of [psiPayload, pm25Payload]) {
       if (payload.code !== undefined && payload.code !== 0) {
         throw new WeatherProviderError(
@@ -341,7 +400,7 @@ export class SingaporeWeatherClient {
     return 'https://api.data.gov.sg';
   }
 
-  private async fetchJson<T>(url: string): Promise<T> {
+  private async fetchJson<T>(url: string, attempt = 0): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.options.timeoutMs ?? 8000);
 
@@ -357,6 +416,11 @@ export class SingaporeWeatherClient {
 
       if (!response.ok) {
         if (response.status === 429) {
+          if (attempt < 2) {
+            clearTimeout(timeout);
+            await delay(1000 * 2 ** attempt);
+            return this.fetchJson<T>(url, attempt + 1);
+          }
           throw new WeatherProviderError('Weather provider rate limit reached (HTTP 429)');
         }
         if (response.status === 401 || response.status === 403) {
@@ -544,6 +608,10 @@ function latestTimestamp(timestamps: Array<string | null>): string | null {
       .filter((timestamp): timestamp is string => Boolean(timestamp))
       .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0] ?? null
   );
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function numberOrNull(value: number | string | undefined): number | null {
