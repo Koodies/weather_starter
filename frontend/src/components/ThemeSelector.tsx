@@ -63,7 +63,7 @@ export function ThemeSelector() {
         onClick={() => setIsOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1.5 text-xs font-medium text-white/85 backdrop-blur-xl hover:bg-white/[0.14]"
+        className="flex items-center gap-1.5 rounded-full border border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/8%)] px-3 py-1.5 text-xs font-medium text-[rgb(var(--ink)/85%)] backdrop-blur-xl hover:bg-[rgb(var(--ink)/14%)]"
       >
         <span>{current?.label ?? 'Theme'}</span>
         <ChevronIcon className={`h-3.5 w-3.5 transition ${isOpen ? 'rotate-180' : ''}`} />
@@ -72,7 +72,7 @@ export function ThemeSelector() {
       {isOpen && (
         <div
           role="listbox"
-          className="absolute right-0 mt-2 min-w-[9rem] overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-1 text-sm text-white/90 shadow-lg shadow-black/20 backdrop-blur-2xl"
+          className="absolute right-0 mt-2 min-w-[9rem] overflow-hidden rounded-2xl border border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/10%)] p-1 text-sm text-[rgb(var(--ink)/90%)] shadow-lg shadow-[rgb(var(--recede)/20%)] backdrop-blur-2xl"
         >
           {themes.map((theme) => {
             const isSelected = theme.id === themeId;
@@ -87,11 +87,11 @@ export function ThemeSelector() {
                   setIsOpen(false);
                 }}
                 className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left transition ${
-                  isSelected ? 'bg-white/15' : 'hover:bg-white/10'
+                  isSelected ? 'bg-[rgb(var(--ink)/15%)]' : 'hover:bg-[rgb(var(--ink)/10%)]'
                 }`}
               >
                 <span>{theme.label}</span>
-                {isSelected && <CheckIcon className="h-3.5 w-3.5 text-white/80" />}
+                {isSelected && <CheckIcon className="h-3.5 w-3.5 text-[rgb(var(--ink)/80%)]" />}
               </button>
             );
           })}

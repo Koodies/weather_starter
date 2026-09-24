@@ -6,7 +6,10 @@ export interface ThemeOption {
   label: string;
 }
 
-export const THEMES: ThemeOption[] = [{ id: 'apple', label: 'Apple' }];
+export const THEMES: ThemeOption[] = [
+  { id: 'apple', label: 'Apple' },
+  { id: 'midnight-aurora', label: 'Midnight Aurora' },
+];
 
 const STORAGE_KEY = 'weather-theme';
 const DEFAULT_THEME = 'apple';
