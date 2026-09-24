@@ -52,7 +52,7 @@ export function TenDayForecast({ weather }: TenDayForecastProps) {
 
   return (
     <section className="rounded-2xl border border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/8%)] backdrop-blur-xl">
-      <header className="flex items-center gap-2 border-b border-[rgb(var(--ink)/10%)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--ink)/60%)]">
+      <header className="eyebrow flex items-center gap-2 border-b border-[rgb(var(--ink)/10%)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--ink)/60%)]">
         <CalendarIcon />
         <span>{days.length}-Day Forecast</span>
       </header>

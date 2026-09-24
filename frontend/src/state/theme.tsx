@@ -9,6 +9,7 @@ export interface ThemeOption {
 export const THEMES: ThemeOption[] = [
   { id: 'apple', label: 'Apple' },
   { id: 'midnight-aurora', label: 'Midnight Aurora' },
+  { id: 'paper-forecast', label: 'Paper Forecast' },
 ];
 
 const STORAGE_KEY = 'weather-theme';

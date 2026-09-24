@@ -50,7 +50,7 @@ export function AddLocationForm() {
       onSubmit={onSubmit}
       className="grid gap-2.5 rounded-2xl border border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/10%)] p-3 backdrop-blur-xl"
     >
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--ink)/60%)]">
+      <p className="eyebrow text-[11px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--ink)/60%)]">
         New coordinate
       </p>
       <div className="grid grid-cols-2 gap-2">

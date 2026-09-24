@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -26,6 +26,13 @@ body,
   --font-display: 'Space Grotesk', sans-serif;
 }
 
+:root[data-theme='paper-forecast'] {
+  --ink: 43 38 32;
+  --recede: 43 38 32;
+  --accent: #2f3a56;
+  --font-display: 'Source Serif 4', serif;
+}
+
 body {
   @apply antialiased;
   color: rgb(var(--ink));
@@ -49,6 +56,17 @@ body {
   background-repeat: no-repeat;
 }
 
+:root[data-theme='paper-forecast'] body {
+  background-image:
+    radial-gradient(rgba(43, 38, 32, 0.05) 1px, transparent 1.2px),
+    linear-gradient(170deg, #ece4d0 0%, #e3d8bf 45%, #ddd0b3 100%);
+  background-size:
+    3px 3px,
+    100% 100%;
+  background-attachment: fixed, fixed;
+  background-repeat: repeat, no-repeat;
+}
+
 button,
 input {
   @apply transition;
@@ -58,6 +76,12 @@ button:focus-visible,
 input:focus-visible {
   @apply outline-none ring-2 ring-offset-0;
   --tw-ring-color: rgb(var(--ink) / 40%);
+}
+
+:root[data-theme='paper-forecast'] .eyebrow {
+  font-variant: small-caps;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 ::-webkit-scrollbar {

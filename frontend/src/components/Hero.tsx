@@ -45,7 +45,7 @@ export function Hero() {
       <div className="mx-auto flex max-w-5xl flex-col gap-3 p-6 lg:p-8">
         <header className="flex flex-col items-center pt-6 pb-2 text-center">
           {isHome && (
-            <div className="mb-2 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--ink)/70%)]">
+            <div className="eyebrow mb-2 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[rgb(var(--ink)/70%)]">
               <LocationIcon className="h-3 w-3" />
               <span>Home</span>
             </div>
