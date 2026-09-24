@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Archivo+Black&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,6 +15,11 @@ body,
   --recede: 0 0 0;
   --accent: rgb(255 255 255 / 30%);
   --font-display: inherit;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+  --radius-control: 0.5rem;
+  --border-w: 1px;
+  --shadow-panel: none;
 }
 
 :root[data-theme='midnight-aurora'] {
@@ -24,6 +29,11 @@ body,
   --aurora-teal: #35d0ba;
   --aurora-violet: #8b7ce0;
   --font-display: 'Space Grotesk', sans-serif;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+  --radius-control: 0.5rem;
+  --border-w: 1px;
+  --shadow-panel: none;
 }
 
 :root[data-theme='paper-forecast'] {
@@ -31,6 +41,36 @@ body,
   --recede: 43 38 32;
   --accent: #2f3a56;
   --font-display: 'Source Serif 4', serif;
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+  --radius-control: 0.5rem;
+  --border-w: 1px;
+  --shadow-panel: none;
+}
+
+:root[data-theme='neo-brutalist'] {
+  --ink: 10 10 10;
+  --recede: 10 10 10;
+  --accent: #ff5a1f;
+  --font-display: 'Archivo Black', sans-serif;
+  --radius-card: 0px;
+  --radius-pill: 0px;
+  --radius-control: 0px;
+  --border-w: 3px;
+  --shadow-panel: 4px 4px 0 0 #000;
+}
+
+.panel {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-panel);
+}
+
+.chip {
+  border-radius: var(--radius-pill);
+}
+
+.control {
+  border-radius: var(--radius-control);
 }
 
 body {
@@ -67,6 +107,10 @@ body {
   background-repeat: repeat, no-repeat;
 }
 
+:root[data-theme='neo-brutalist'] body {
+  background: #ffffff;
+}
+
 button,
 input {
   @apply transition;
@@ -82,6 +126,11 @@ input:focus-visible {
   font-variant: small-caps;
   text-transform: none;
   letter-spacing: 0.02em;
+}
+
+:root[data-theme='neo-brutalist'] .eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
 }
 
 ::-webkit-scrollbar {

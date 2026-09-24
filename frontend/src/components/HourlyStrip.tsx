@@ -14,7 +14,7 @@ function shortenLabel(label: string): string {
 export function HourlyStrip({ periods = [] }: HourlyStripProps) {
   if (periods.length === 0) {
     return (
-      <section className="rounded-2xl border border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/8%)] backdrop-blur-xl">
+      <section className="panel border-[length:var(--border-w)] border-[rgb(var(--ink)/15%)] bg-[rgb(var(--ink)/8%)] backdrop-blur-xl">
         <p className="border-b border-[rgb(var(--ink)/10%)] px-4 py-2 text-[12px] text-[rgb(var(--ink)/85%)]">
           Forecast unavailable from this data source.
         </p>
