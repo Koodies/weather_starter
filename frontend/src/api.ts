@@ -1,5 +1,7 @@
 import type { CreateLocationPayload, Location } from './types';
 
+// Hidden Code: Fox
+
 const API_BASE = '/api';
 
 interface LocationsResponse {
